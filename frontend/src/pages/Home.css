@@ -1,0 +1,108 @@
+/* 🔹 Home Container: Move Content Close to Nav2 */
+.home-container {
+    padding-top: 100px;
+    width: 100%;
+    margin-left: 0px;  /* 🔹 Remove extra left space */
+    max-width: calc(100% - 250px); /* 🔹 Keep space on the right */
+}
+
+/* 🔹 Section Titles */
+.section-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px; /* 🔹 Reduce space between titles & carousel */
+    margin-left: 0px; /* 🔹 Align directly with content */
+}
+
+/* 🔹 Section Container: Ensure Spacing Between Sections */
+.section-container {
+    margin-bottom: 60px; /* 🔹 Extended space between sections */
+    display: block;
+}
+
+/* 🔹 Carousel Container */
+.carousel-container {
+    margin-left: 0px; /* 🔹 Remove left margin */
+    margin-right: 40px; /* 🔹 Keep space on the right */
+}
+
+/* 🔹 Job List Container */
+.home-job-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;    
+    margin-left: 80px;
+}
+
+/* 🔹 Home Job Item - Separate from TimViec */
+.home-job-item {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+    width: 100%; /* ✅ Ensures consistent size */
+}
+
+.home-job-item:hover {
+    transform: translateY(-3px);
+}
+
+/* 🔹 Home Job Title */
+.home-job-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+/* 🔹 Company Name */
+.company-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 🔹 Salary */
+.salary {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+/* 🔹 Home Job Description - Fixed Size */
+.home-job-description {
+    font-size: 25px;
+    color: #444;
+    width: 100%;
+    width: 1000px;
+    min-height: 60px;  /* ✅ Ensure all descriptions have the same height */
+    overflow: hidden;
+}
+
+/* 🔹 Make "Công Việc" header clickable */
+.clickable {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.clickable:hover {
+    color: #007bff; /* Change color on hover */
+}
+
+
+/* 🔹 Ensure job list aligns well */
+@media (max-width: 768px) {
+    .job-list-container {
+        width: 100%;
+    }
+
+    .home-job-item {
+        width: 100%;
+    }
+
+    .home-job-description {
+        width: 100%;
+    }
+}

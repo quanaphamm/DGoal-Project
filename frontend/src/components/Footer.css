@@ -1,0 +1,27 @@
+/* 🔹 Full-Width Footer */
+.footer {
+    width: 100%;
+    background-color: #0b6e4f; /* Dark Green */
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+}
+
+/* 🔹 Ensure Full-Width Container */
+.footer .container-fluid {
+    padding: 0 40px; /* Adds spacing inside */
+}
+
+/* 🔹 Footer Links */
+.footer-links a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}

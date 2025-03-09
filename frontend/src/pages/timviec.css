@@ -1,0 +1,126 @@
+.timviec-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    padding-top: 50px; /* Ensure top content is visible */
+}
+
+.job-list {
+    width: 35vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 2px solid #ddd;
+   
+}
+
+.job-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.job-item:hover {
+    background: #e9ecef;
+}
+
+.job-item.selected{
+    background: #e9ecef;
+}
+
+.job-details {
+    width: 1000px;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* 🛠 Larger Font Sizes for Better Readability */
+.company {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.job-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.divider {
+    border-bottom: 2px solid #ddd;
+    margin: 20px 0;
+}
+
+.label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.salary, .location, .type {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 🛠 Fix Job Description & Job Requirements Display */
+.job-description, .job-requirements {
+    font-size: 28px; /* Increased font size */
+    line-height: 1.8;
+    color: #444;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    margin-bottom: 20px;
+    display: block; /* Ensure it's visible */
+}
+
+/* Ensure job requirements are visible */
+.job-requirements {
+    display: block;
+}
+
+/* 🛠 Buttons */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.save-btn, .apply-btn {
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.save-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.apply-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.save-btn:hover {
+    background-color: #5a6268;
+}
+
+.apply-btn:hover {
+    background-color: #218838;
+}

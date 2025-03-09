@@ -1,0 +1,31 @@
+/* 🔹 Wrapper */
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin-left: 70px; /* 🔹 Removes the left gap */
+    padding-right: 10px; /* 🔹 Keep right margin intact */
+    overflow: hidden;
+}
+
+
+/* 🔹 Image Container */
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 🔹 Image Track */
+.carousel-track {
+    display: flex;
+    gap: 15px; /* 🔹 Space between images */
+    transition: transform 0.5s ease-in-out;
+}
+
+/* 🔹 Images */
+.carousel-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}

@@ -1,0 +1,70 @@
+/* 🔹 Fix Navbar Positioning */
+.fixed-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* 🔹 Main Navbar */
+.main-navbar {
+    width: 100%;
+    background-color: #212529 !important; /* Dark background */
+    padding: 12px 0; /* Adjust padding */
+    display: flex;
+    align-items: center;
+}
+
+/* 🔹 Ensures content does not overlap with fixed navbar */
+body {
+    padding-top: 10; /* Adjusted to fit navbar height */
+}
+
+/* 🔹 Logo */
+.navbar-logo {
+    font-size: 40px !important; /* Proper size */
+    font-weight: bold !important;
+    color: white !important;
+    padding-left: 20px !important;
+}
+
+/* 🔹 Search Bar */
+.search-bar {
+    flex-grow: 10 !important; /* Allows responsiveness */
+    max-width: 85%; /* Adjust width */
+    height: 60px !important; /* Adjust height */
+    font-size: 18px !important;
+    padding: 7px !important;
+}
+
+/* 🔹 Navbar Links */
+.navbar-links .nav-link, .nav-item {
+    font-size: 22px !important;
+    margin-right: 30px !important;
+}
+
+/* 🔹 Login Button */
+.login-btn {
+    font-size: 22px !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: 50px;
+}
+
+/* 🔹 Responsive Navbar */
+@media (max-width: 992px) {
+    .navbar-links {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .search-bar {
+        max-width: 100%;
+        height: 40px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,124 @@
+/* 🛠 Main Container */
+.quanao-container {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding-top: 30px;
+    margin-top: 40px;
+}
+
+/* 🛠 Filter Navigation Sidebar */
+.filter-nav {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 2px solid #dee2e6;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 70px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* 🛠 Adjust Content to Remove the Gap */
+.quanao-content {
+    flex: 1;
+    margin-left: 250px; /* ✅ Ensures content starts immediately next to filter */
+    padding: 20px;
+}
+
+/* 🛠 Section Title */
+.section-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 🛠 Clothing Grid (Items Align from Left to Right) */
+.clothing-grid {
+    display: flex; /* ✅ Make items appear from left to right */
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* ✅ Align items to the left */
+    width: 100%;
+}
+
+/* 🛠 Clothing Item */
+.clothing-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+    width: 350px; /* ✅ Slightly Increased Width */
+}
+
+.clothing-item:hover {
+    transform: scale(1.05);
+}
+
+/* 🛠 Clothing Image (BIGGER SIZE) */
+.clothing-image {
+    width: 100%;
+    height: 300px; /* ✅ Increased Height for Bigger Image */
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* 🛠 Clothing Name */
+.clothing-name {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 🛠 Clothing Price */
+.clothing-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: green;
+}
+
+/* 🛠 Clothing Location */
+.clothing-location {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 🛠 Clothing Status */
+.clothing-status {
+    font-size: 14px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* 🛠 Responsive Design */
+@media (max-width: 992px) {
+    .quanao-container {
+        flex-direction: column;
+    }
+
+    .filter-nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .quanao-content {
+        margin-left: 0; /* ✅ No gap on smaller screens */
+        padding: 20px;
+    }
+
+    .clothing-grid {
+        justify-content: center; /* ✅ Center items on smaller screens */
+    }
+}

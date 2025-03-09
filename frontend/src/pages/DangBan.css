@@ -1,0 +1,97 @@
+/* 🛠 Main Container */
+.dangban-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* 🛠 Form Styling */
+.dangban-form {
+    width: 100%; /* ✅ Form now takes 40% of the screen */
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🛠 Title */
+.dangban-form h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 🛠 Form Groups */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* 🛠 Labels */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* 🛠 Input Fields */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 🛠 Image Upload Input */
+.form-group input[type="file"] {
+    border: none;
+    padding: 5px;
+}
+
+/* 🛠 Image Preview - FIX SIZE */
+.image-preview {
+    display: block;
+    margin-top: 15px;
+    max-width: 100%;  /* ✅ Ensures image does not exceed form width */
+    max-height: 300px; /* ✅ Limits image height */
+    object-fit: contain; /* ✅ Keeps aspect ratio */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* 🛠 Textarea (Description) */
+.form-group textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* 🛠 Submit Button */
+.submit-btn {
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
+
+/* 🛠 Responsive Design */
+@media (max-width: 768px) {
+    .dangban-form {
+        width: 80%; /* ✅ Adjust width for mobile */
+    }
+}

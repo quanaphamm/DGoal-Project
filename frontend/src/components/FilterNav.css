@@ -1,0 +1,62 @@
+/* 🛠 Filter Navigation Sidebar */
+.filter-nav {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 2px solid #dee2e6;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 70px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* 🛠 Filter Title */
+.filter-nav h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* 🛠 Filter Labels */
+.filter-nav label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 🛠 Filter Dropdowns */
+.filter-nav select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 🛠 Adjust Content to Remove the Gap */
+.dienthoai-content {
+    flex: 1;
+    margin-left: 250px; /* ✅ Ensures content starts immediately next to filter */
+    padding: 20px;
+}
+
+/* 🛠 Responsive Design */
+@media (max-width: 992px) {
+    .filter-nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .dienthoai-content {
+        margin-left: 0; /* ✅ No gap on smaller screens */
+        padding: 20px;
+    }
+}

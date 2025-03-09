@@ -1,0 +1,187 @@
+/* ✅ Ensure Full Page Display */
+.frontpage-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f2f5; /* 🔹 Slight gray background */
+}
+
+/* ✅ Center Content */
+.frontpage-container {
+    flex: 1;
+    width: 1300px;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 🔹 Soft shadow */
+}
+
+/* ✅ Post Status Box */
+.post-status {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 30px;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.post-status:hover {
+    background: #f5f5f5;
+}
+
+.post-status .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-status input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    cursor: pointer;
+    background: #f0f2f5;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.post-status input:hover {
+    background: #e8e8e8;
+}
+
+/* ✅ Posts Layout */
+.posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+}
+
+/* ✅ Post Styling */
+.post {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 750px;
+}
+
+/* ✅ Post Header */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.post-header .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.post-header h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.post-header p {
+    margin: 0;
+    font-size: 14px;
+    color: gray;
+}
+
+/* ✅ Post Content */
+.post-content {
+    margin: 15px 0;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* ✅ Post Image */
+.post-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* ✅ Post Actions - Like, Comment, Share */
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 16px;
+    color: gray;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.post-actions span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: 0.2s ease;
+}
+
+.post-actions span:hover {
+    background-color: #f0f0f0;
+}
+
+/* ✅ Post Action Icons */
+.post-actions span i {
+    font-size: 18px;
+}
+
+/* ✅ Footer */
+footer {
+    width: 100%;
+    background-color: #198754;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+}
+
+/* ✅ Responsive Fix */
+@media (max-width: 768px) {
+    .frontpage-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .post-status {
+        padding: 10px;
+    }
+
+    .post-status input {
+        font-size: 14px;
+    }
+
+    .post {
+        padding: 15px;
+    }
+
+    .post-actions {
+        font-size: 14px;
+    }
+}

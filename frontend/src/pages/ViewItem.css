@@ -1,0 +1,114 @@
+/* 🛠 Main Container */
+.view-container {
+    max-width: 1200px;
+    margin: 30px auto;  /* ✅ Center the container */
+    padding: 50px 20px; /* ✅ Add spacing */
+    min-height: 100vh; /* ✅ Ensure footer stays at the bottom */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 🛠 Flexbox Layout */
+.view-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 80px; /* ✅ More spacing between image & details */
+    margin-bottom: 40px; /* ✅ More space before description */
+    padding-left: 50px; /* ✅ Move content slightly to the right */
+}
+
+/* 🛠 Image Section */
+.view-image {
+    flex: 1;
+    max-width: 600px; /* ✅ Increased size */
+    display: flex;
+    justify-content: center;
+}
+
+.view-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🛠 Details Section */
+.view-details {
+    flex: 1;
+}
+
+.view-details h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.view-price {
+    font-size: 26px;
+    font-weight: bold;
+    color: #e60000;
+    margin-bottom: 20px;
+}
+
+.view-location {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* 🛠 Buttons - Better Alignment */
+.view-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.buy-button, .cart-button {
+    flex: 1;
+    padding: 14px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.buy-button {
+    background-color: #ff6600;
+    color: white;
+}
+
+.buy-button:hover {
+    background-color: #e65c00;
+}
+
+.cart-button {
+    background-color: #0066ff;
+    color: white;
+}
+
+.cart-button:hover {
+    background-color: #0052cc;
+}
+
+/* 🛠 Section Separation */
+.view-description {
+    margin-top: 60px; /* ✅ More spacing below buttons */
+    padding: 20px;
+    border-top: 3px solid #ddd;
+}
+
+/* 🛠 Ensure Footer is Always at Bottom */
+.footer {
+    width: 100%;
+    background-color: #0d6e3d;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    margin-top: auto; /* ✅ Push footer to the bottom */
+}
