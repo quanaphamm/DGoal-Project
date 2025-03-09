@@ -12,7 +12,7 @@ const getAuthHeaders = () => {
 // ✅ Login User
 export const loginUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, userData);
+    const response = await axios.post(`${API_URL}/api/login`, userData);
 
     // ✅ Save user info & token in localStorage
     localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -27,7 +27,7 @@ export const loginUser = async (userData) => {
 // ✅ Register User
 export const registerUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    const response = await axios.post(`${API_URL}/api/register`, userData);
     return response.data;
   } catch (error) {
     return { error: error.response?.data?.error || "Đã xảy ra lỗi!" };
