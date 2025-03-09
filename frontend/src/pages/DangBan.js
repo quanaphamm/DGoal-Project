@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { uploadProduct } from "../services/api"; // ✅ API function
 import "./DangBan.css";
 
 const DangBan = () => {
@@ -7,18 +8,19 @@ const DangBan = () => {
 
     const [product, setProduct] = useState({
         name: "",
-        category: "dienthoai", // 🔹 Match category keys in localStorage
+        category: "dienthoai",
         description: "",
         price: "",
         image: null
     });
 
     const [imagePreview, setImagePreview] = useState(null);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     // 🛠 Handle input changes
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProduct({ ...product, [name]: value });
+        setProduct({ ...product, [e.target.name]: e.target.value });
     };
 
     // 🛠 Handle image upload
@@ -26,48 +28,46 @@ const DangBan = () => {
         const file = e.target.files[0];
         if (file) {
             setProduct({ ...product, image: file });
-            setImagePreview(URL.createObjectURL(file)); // Show image preview
+            setImagePreview(URL.createObjectURL(file));
         }
     };
 
     // 🛠 Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setSuccess("");
 
         if (!product.image) {
-            alert("Hãy tải lên một hình ảnh sản phẩm!");
+            setError("Hãy tải lên một hình ảnh sản phẩm!");
             return;
         }
 
-        // ✅ Create product object
-        const newProduct = {
-            id: Date.now(), // Unique ID
-            name: product.name,
-            category: product.category,
-            description: product.description,
-            price: parseInt(product.price),
-            location: "Hồ Chí Minh", // Default location
-            status: "new", // Default status
-            image: imagePreview, // Use preview URL
-        };
+        // ✅ Prepare FormData for file upload
+        const formData = new FormData();
+        formData.append("name", product.name);
+        formData.append("category", product.category);
+        formData.append("description", product.description);
+        formData.append("price", product.price);
+        formData.append("image", product.image);
 
-        // ✅ Retrieve existing products from localStorage
-        const storedProducts = JSON.parse(localStorage.getItem(product.category)) || [];
-
-        // ✅ Save new product
-        const updatedProducts = [...storedProducts, newProduct];
-        localStorage.setItem(product.category, JSON.stringify(updatedProducts));
-
-        alert("Sản phẩm đã được đăng thành công!");
-
-        // ✅ Redirect to respective category page
-        navigate(`/${product.category}`);
+        try {
+            const response = await uploadProduct(formData); // ✅ Send to backend
+            setSuccess("Sản phẩm đã được đăng thành công!");
+            
+            // ✅ Redirect after 2s
+            setTimeout(() => navigate(`/${product.category}`), 2000);
+        } catch (err) {
+            setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+        }
     };
 
     return (
         <div className="dangban-container">
             <form className="dangban-form" onSubmit={handleSubmit}>
                 <h2>Đăng Bán Sản Phẩm</h2>
+                {error && <p className="error-message">{error}</p>}
+                {success && <p className="success-message">{success}</p>}
 
                 {/* 🏷 Product Name */}
                 <div className="form-group">

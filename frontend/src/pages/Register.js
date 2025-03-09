@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../services/api"; // ✅ Import API function
 import "./Register.css";
 
 const Register = () => {
@@ -19,6 +20,8 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
     if (!user.fullName || !user.email || !user.password || !user.confirmPassword) {
       setError("Vui lòng nhập đầy đủ thông tin.");
@@ -31,25 +34,16 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: user.fullName,
-          email: user.email,
-          password: user.password,
-        }),
+      const response = await registerUser({
+        fullName: user.fullName,
+        email: user.email,
+        password: user.password,
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        setSuccess("Đăng ký thành công! Chuyển hướng đến trang đăng nhập...");
-        setTimeout(() => navigate("/login"), 2000);
-      } else {
-        setError(data.error);
-      }
-    } catch (error) {
-      setError("Có lỗi xảy ra. Vui lòng thử lại.");
+      setSuccess("Đăng ký thành công! Chuyển hướng đến trang đăng nhập...");
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+      setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 

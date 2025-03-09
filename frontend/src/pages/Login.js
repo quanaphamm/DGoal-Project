@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../services/api"; // ✅ Import API function
 import "./Login.css";
 
 const Login = () => {
@@ -16,30 +17,18 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
+      const response = await loginUser(user); // ✅ Use API function from `services/api.js`
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error);
-        return;
-      }
-
-      // ✅ Store user data in localStorage to persist across pages
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // ✅ Store user data in localStorage to persist session
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
       // ✅ Redirect to homepage
       navigate("/frontpage");
 
-      // ✅ Reload the page to update Navbar immediately
+      // ✅ Reload to update Navbar immediately
       window.location.reload();
-
-    } catch (error) {
-      setError("Có lỗi xảy ra. Vui lòng thử lại.");
+    } catch (err) {
+      setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 
