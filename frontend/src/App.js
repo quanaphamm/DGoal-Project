@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import NavigationBar from "./components/Navbar"; 
 import SecondNavbar from "./components/SecondNavbar";
 import FilterNav from "./components/FilterNav";
@@ -76,6 +76,8 @@ const App = () => {
           { path: "/checkout", element: <Checkout cartItems={cartItems} setCartItems={setCartItems} /> },
           { path: "/frontpage", element: <FrontPage /> },
           { path: "/tuyendung", element: <TuyenDung /> },  
+          {/* ✅ Catch-all route */}
+          
         ].map(({ path, element, hideCart = false }) => (
           <Route
             key={path}
