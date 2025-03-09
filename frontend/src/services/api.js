@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// ✅ Get API URL from `.env` or use fallback (for demo)
+// ✅ Get API URL from `.env` or fallback (for demo)
 const API_URL = process.env.REACT_APP_API_URL || "https://dgoal.onrender.com/api";
 
-// ✅ Set Authorization Header
+// ✅ Helper Function: Get Authorization Headers
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -14,7 +14,7 @@ export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/login`, userData);
 
-    // ✅ Save token & user info to localStorage
+    // ✅ Save user info & token in localStorage
     localStorage.setItem("user", JSON.stringify(response.data.user));
     localStorage.setItem("token", response.data.token);
 
@@ -53,7 +53,7 @@ export const uploadProduct = async (productData) => {
       formData.append(key, productData[key]);
     });
 
-    const response = await axios.post(`${API_URL}/upload`, formData, {
+    const response = await axios.post(`${API_URL}/upload-product`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         ...getAuthHeaders(),
@@ -71,10 +71,10 @@ export const getProducts = () => {
   return JSON.parse(localStorage.getItem("products")) || [];
 };
 
-// ✅ Upload Job Listing
-export const uploadJob = async (jobData) => {
+// ✅ Post Job Listing
+export const postJob = async (jobData) => {
   try {
-    const response = await axios.post(`${API_URL}/jobs`, jobData, {
+    const response = await axios.post(`${API_URL}/post-job`, jobData, {
       headers: getAuthHeaders(),
     });
 
