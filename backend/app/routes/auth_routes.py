@@ -2,7 +2,7 @@ import os
 import json
 from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_bcrypt import Bcrypt
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 
 bcrypt = Bcrypt()
 auth_routes = Blueprint("auth_routes", __name__)
@@ -189,3 +189,9 @@ def get_users():
         {"id": u["id"], "full_name": u["full_name"], "email": u["email"]}
         for u in users
     ]}), 200
+
+# If you're using a Flask app directly:
+CORS(app, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}})
+
+# Or if you're using a Blueprint:
+CORS(auth_routes, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}})
