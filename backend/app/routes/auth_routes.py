@@ -2,7 +2,7 @@ import os
 import json
 from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_bcrypt import Bcrypt
-from flask_cors import cross_origin, CORS
+from flask_cors import CORS
 
 bcrypt = Bcrypt()
 auth_routes = Blueprint("auth_routes", __name__)
@@ -38,23 +38,8 @@ def save_data(file_path, data):
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# ✅ Handle CORS Preflight Requests
-@auth_routes.route('/register', methods=['POST'])
-@auth_routes.route('/login', methods=['POST'])
-
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
-def handle_preflight():
-    """Handles CORS preflight requests for auth routes"""
-    response = make_response()
-    response.headers["Access-Control-Allow-Origin"] = "https://dgoal-frontend.onrender.com"
-    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response, 200
-
 # ✅ User Registration
 @auth_routes.route('/auth/register', methods=['POST'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def register():
     data = request.get_json()
     full_name = data.get("fullName")
@@ -82,7 +67,6 @@ def register():
 
 # ✅ User Login
 @auth_routes.route('/auth/login', methods=['POST'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def login():
     data = request.get_json()
     email = data.get("email")
@@ -113,7 +97,6 @@ def login():
 
 # ✅ Upload Product
 @auth_routes.route('/products/upload', methods=['POST'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def upload_product():
     data = request.form
     image_file = request.files.get("image")
@@ -143,14 +126,12 @@ def upload_product():
 
 # ✅ Get All Products
 @auth_routes.route('/products', methods=['GET'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_products():
     products = load_data(PRODUCTS_FILE)
     return jsonify({"products": products}), 200
 
 # ✅ Post Job (Tuyển Dụng)
 @auth_routes.route('/jobs/post', methods=['POST'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def post_job():
     data = request.get_json()
 
@@ -175,23 +156,15 @@ def post_job():
 
 # ✅ Get All Jobs
 @auth_routes.route('/jobs', methods=['GET'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_jobs():
     jobs = load_data(JOBS_FILE)
     return jsonify({"jobs": jobs}), 200
 
 # ✅ Get All Registered Users
 @auth_routes.route('/users', methods=['GET'])
-@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_users():
     users = load_data(USER_FILE)
     return jsonify({"registered_users": [
         {"id": u["id"], "full_name": u["full_name"], "email": u["email"]}
         for u in users
     ]}), 200
-
-# If you're using a Flask app directly:
-CORS(app, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}})
-
-# Or if you're using a Blueprint:
-CORS(auth_routes, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}})

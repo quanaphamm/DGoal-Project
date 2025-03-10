@@ -12,8 +12,7 @@ def create_app():
     app = Flask(__name__)
 
     # ✅ Fix CORS with Proper Settings
-    CORS(app, resources={r"/*": {"origins": ["https://dgoal-frontend.onrender.com", "http://localhost:3000"]}}, supports_credentials=True)
-
+    CORS(app, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}})
 
     # ✅ Initialize Flask-Bcrypt
     bcrypt.init_app(app)

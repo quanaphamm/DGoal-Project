@@ -3,6 +3,16 @@ import axios from "axios";
 // ✅ Backend API Base URL (Matches the Correct Backend Endpoint)
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onrender.com/api";
 
+// Create an axios instance with the base URL
+const api = axios.create({
+    baseURL: 'https://dgoal-project.onrender.com',
+    // or if using the proxy in _redirects:
+    // baseURL: '/api',
+    withCredentials: true,
+});
+
+export default api;
+
 /**
  * ✅ Login User
  * @param {Object} userData - { email, password }
