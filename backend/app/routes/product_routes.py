@@ -6,9 +6,12 @@ from flask_cors import cross_origin
 product_routes = Blueprint("product_routes", __name__)
 
 # ✅ File Paths
-BASE_DIR = os.path.dirname(__file__)  
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 PRODUCTS_FILE = os.path.join(BASE_DIR, "..", "products.json")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "static", "uploads")
+
+# Print the actual path for debugging
+print(f"Upload folder path: {UPLOAD_FOLDER}")
 
 # ✅ Ensure Upload Folder Exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -32,7 +35,12 @@ def save_data(file_path, data):
 # ✅ Serve Uploaded Images
 @product_routes.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    print(f"Serving file: {filename} from {UPLOAD_FOLDER}")
+    try:
+        return send_from_directory(UPLOAD_FOLDER, filename)
+    except Exception as e:
+        print(f"Error serving file: {e}")
+        return jsonify({"error": str(e)}), 404
 
 # ✅ Handle CORS Preflight Requests
 @product_routes.route('/api/products/upload', methods=['OPTIONS'])
@@ -60,7 +68,9 @@ def upload_product():
     # ✅ Save image
     image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
     image_file.save(image_path)
-    image_url = f"https://dgoal-project.onrender.com/products/uploads/{image_file.filename}"
+    
+    # Use a relative path that will work with your static file serving
+    image_url = f"/static/uploads/{image_file.filename}"
 
     products = load_data(PRODUCTS_FILE)
     product = {
@@ -91,3 +101,13 @@ def debug_products():
         "products": products,
         "file_path": PRODUCTS_FILE
     }), 200
+
+@product_routes.route('/image-debug')
+def image_debug():
+    files = os.listdir(UPLOAD_FOLDER)
+    return jsonify({
+        "upload_folder": UPLOAD_FOLDER,
+        "files": files,
+        "exists": os.path.exists(UPLOAD_FOLDER),
+        "is_dir": os.path.isdir(UPLOAD_FOLDER)
+    })
