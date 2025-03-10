@@ -4,7 +4,6 @@ import "./FrontPage.css";
 
 const FrontPage = () => {
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState("");
   const [showPostModal, setShowPostModal] = useState(false);
   const storedUser = JSON.parse(localStorage.getItem("user")) || { fullName: "QUAN ANH PHAM" };
 
@@ -35,7 +34,7 @@ const FrontPage = () => {
       },
     ];
     setPosts(storedPosts);
-  }, []);
+  }, []); // ✅ No unnecessary dependencies
 
   const handleNewPost = (content) => {
     if (!content.trim()) return;

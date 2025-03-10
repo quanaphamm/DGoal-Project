@@ -18,7 +18,7 @@ const NavigationBar = ({ cartItems, setCartItems }) => {
             setCartItems([]); // Clear cart if no user
             localStorage.removeItem("cart");
         }
-    }, []);
+    }, [setCartItems]); // ✅ Fixed ESLint warning
 
     const handleLogout = () => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || []; // ✅ Preserve cart
@@ -29,7 +29,6 @@ const NavigationBar = ({ cartItems, setCartItems }) => {
         navigate("/login");
     };
     
-
     // ✅ Handle Search
     const handleSearch = (e) => {
         e.preventDefault();
