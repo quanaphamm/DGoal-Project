@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_cors import cross_origin
 
 product_routes = Blueprint("product_routes", __name__)
@@ -41,9 +41,16 @@ def handle_options():
     return jsonify({"message": "CORS Preflight OK"}), 200
 
 # ✅ Upload Product (Đăng Bán Sản Phẩm)
-@product_routes.route('/api/products/upload', methods=['POST'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@product_routes.route('/upload', methods=['POST', 'OPTIONS'])
 def upload_product():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "https://dgoal-frontend.onrender.com")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        return response
+        
     data = request.form
     image_file = request.files.get("image")
 

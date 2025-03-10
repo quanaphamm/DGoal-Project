@@ -66,7 +66,7 @@ def register():
     return jsonify({"message": "Đăng ký thành công!", "user_id": user["id"]}), 201
 
 # ✅ User Login
-@auth_routes.route('/auth/login', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get("email")
@@ -96,7 +96,7 @@ def login():
     return jsonify(response_data), 200
 
 # ✅ Upload Product
-@auth_routes.route('/products/upload', methods=['POST'])
+@auth_routes.route('/upload', methods=['POST'])
 def upload_product():
     data = request.form
     image_file = request.files.get("image")
@@ -182,3 +182,12 @@ def handle_preflight():
 @auth_routes.route('/test', methods=['GET'])
 def test_route():
     return jsonify({"message": "Backend is working!"}), 200
+
+@auth_routes.route('/upload', methods=['OPTIONS'])
+def handle_product_preflight():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "https://dgoal-frontend.onrender.com")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response

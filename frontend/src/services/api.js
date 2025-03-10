@@ -46,9 +46,8 @@ export const uploadProduct = async (formData) => {
     try {
         console.log("🔹 Uploading product:", Object.fromEntries(formData));
 
-        const response = await axios.post(`${API_BASE_URL}/products/upload`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-            withCredentials: true
+        const response = await api.post('/products/upload', formData, {
+            headers: { "Content-Type": "multipart/form-data" }
         });
 
         console.log("✅ Upload Successful:", response.data);
