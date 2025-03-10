@@ -77,8 +77,17 @@ def upload_product():
     return jsonify({"message": "Sản phẩm đã được đăng bán!", "product": product}), 201
 
 # ✅ Get All Products
-@product_routes.route('/api/products', methods=['GET'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@product_routes.route('/', methods=['GET'])
 def get_products():
     products = load_data(PRODUCTS_FILE)
     return jsonify({"products": products}), 200
+
+# ✅ Debug Products
+@product_routes.route('/debug', methods=['GET'])
+def debug_products():
+    products = load_data(PRODUCTS_FILE)
+    return jsonify({
+        "products_count": len(products),
+        "products": products,
+        "file_path": PRODUCTS_FILE
+    }), 200

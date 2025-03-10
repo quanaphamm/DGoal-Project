@@ -86,7 +86,7 @@ export const getProducts = async () => {
     try {
         console.log("🔹 Fetching products...");
 
-        const response = await axios.get(`${API_BASE_URL}/products`, { withCredentials: true });
+        const response = await api.get('/products');
 
         if (!response.data || !response.data.products) {
             throw new Error("❌ No product data received from server!");
