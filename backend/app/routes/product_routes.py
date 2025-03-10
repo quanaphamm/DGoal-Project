@@ -34,9 +34,15 @@ def save_data(file_path, data):
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+# ✅ Handle CORS Preflight Requests
+@product_routes.route('/api/products/upload', methods=['OPTIONS'])
+@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+def handle_options():
+    return jsonify({"message": "CORS Preflight OK"}), 200
+
 # ✅ Upload Product (Đăng Bán Sản Phẩm)
 @product_routes.route('/api/products/upload', methods=['POST'])
-@cross_origin(origins="http://localhost:3000", supports_credentials=True)
+@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
 def upload_product():
     data = request.form
     image_file = request.files.get("image")
@@ -65,7 +71,7 @@ def upload_product():
 
 # ✅ Get All Products
 @product_routes.route('/api/products', methods=['GET'])
-@cross_origin(origins="http://localhost:3000", supports_credentials=True)
+@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
 def get_products():
     products = load_data(PRODUCTS_FILE)
     return jsonify({"products": products}), 200

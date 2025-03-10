@@ -5,14 +5,14 @@ from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
-# ✅ Define Upload Folder for Static Files (like images)
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "..", "uploads")
+# ✅ Define Absolute Path for Upload Folder
+UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads"))
 
 def create_app():
     app = Flask(__name__)
 
-    # ✅ Proper CORS Fix: Allow requests **only** from your frontend
-    CORS(app, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}}, supports_credentials=True)
+    # ✅ Proper CORS Fix: Allow requests from frontend + local testing
+    CORS(app, resources={r"/*": {"origins": ["https://dgoal-frontend.onrender.com", "http://localhost:3000"]}}, supports_credentials=True)
 
     # ✅ Initialize Flask-Bcrypt
     bcrypt.init_app(app)
