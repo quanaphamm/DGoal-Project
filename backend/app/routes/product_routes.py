@@ -3,8 +3,6 @@ import json
 from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_cors import cross_origin
 import uuid
-from PIL import Image
-import numpy as np
 
 product_routes = Blueprint("product_routes", __name__)
 
@@ -125,15 +123,8 @@ def serve_static_file(filename):
 
 @product_routes.route('/test-image')
 def test_image():
-    # Create a simple test image
-    test_image_path = os.path.join(UPLOAD_FOLDER, "test.jpg")
-    
-    # Create a simple red square image
-    img = Image.fromarray(np.ones((100, 100, 3), dtype=np.uint8) * 255)
-    img.save(test_image_path)
-    
     return jsonify({
-        "message": "Test image created",
-        "path": test_image_path,
-        "url": f"https://dgoal-project.onrender.com/static/uploads/test.jpg"
+        "message": "Test image endpoint",
+        "upload_folder": UPLOAD_FOLDER,
+        "static_url": "https://dgoal-project.onrender.com/static/uploads/"
     })

@@ -1,5 +1,5 @@
-flask
-flask-cors
-gunicorn
-uvicorn
-flask-bcrypt
+Flask==2.3.3
+Flask-Cors==4.0.0
+Flask-Bcrypt==1.0.1
+gunicorn==21.2.0
+Pillow==10.1.0
