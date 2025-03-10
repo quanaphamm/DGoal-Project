@@ -65,12 +65,9 @@ export const uploadProduct = async (formData) => {
 export const postJob = async (jobData) => {
     try {
         console.log("🔹 Posting job:", jobData);
-
-        const response = await axios.post(`${API_BASE_URL}/jobs/post`, jobData, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true
-        });
-
+        
+        const response = await api.post('/jobs/post', jobData);
+        
         console.log("✅ Job Posted:", response.data);
         return response.data;
     } catch (error) {
@@ -106,13 +103,13 @@ export const getProducts = async () => {
 export const getJobs = async () => {
     try {
         console.log("🔹 Fetching jobs...");
-
-        const response = await axios.get(`${API_BASE_URL}/jobs`, { withCredentials: true });
-
+        
+        const response = await api.get('/jobs');
+        
         if (!response.data || !response.data.jobs) {
             throw new Error("❌ No job data received from server!");
         }
-
+        
         console.log("✅ Fetched Jobs:", response.data.jobs);
         return response.data;
     } catch (error) {

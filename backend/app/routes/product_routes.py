@@ -60,7 +60,7 @@ def upload_product():
     # ✅ Save image
     image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
     image_file.save(image_path)
-    image_url = f"/uploads/{image_file.filename}"
+    image_url = f"https://dgoal-project.onrender.com/products/uploads/{image_file.filename}"
 
     products = load_data(PRODUCTS_FILE)
     product = {
