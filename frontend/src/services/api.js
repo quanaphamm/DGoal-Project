@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// ✅ Backend API Base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onrender.com";
-
+// ✅ Backend API Base URL (Make sure it matches the correct backend URL)
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onrender.com/api";
 
 /**
  * ✅ Login User
@@ -10,14 +9,14 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onr
  */
 export const loginUser = async (userData) => {
     try {
-        console.log("🔹 Attempting login with:", userData); // ✅ Debug log
+        console.log("🔹 Attempting login with:", userData);
 
-        const response = await axios.post(`${API_BASE_URL}/login`, userData, {
+        const response = await axios.post(`${API_BASE_URL}/auth/login`, userData, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         });
 
-        console.log("✅ Login Response:", response.data); // ✅ Debug log
+        console.log("✅ Login Response:", response.data);
 
         if (!response.data || !response.data.user) {
             throw new Error("❌ No user data received from server!");
@@ -36,14 +35,14 @@ export const loginUser = async (userData) => {
  */
 export const registerUser = async (userData) => {
     try {
-        console.log("🔹 Attempting registration with:", userData); // ✅ Debug log
+        console.log("🔹 Attempting registration with:", userData);
 
-        const response = await axios.post(`${API_BASE_URL}/register`, userData, {
+        const response = await axios.post(`${API_BASE_URL}/auth/register`, userData, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         });
 
-        console.log("✅ Registration Successful:", response.data); // ✅ Debug log
+        console.log("✅ Registration Successful:", response.data);
 
         return response.data;
     } catch (error) {
@@ -58,14 +57,14 @@ export const registerUser = async (userData) => {
  */
 export const uploadProduct = async (formData) => {
     try {
-        console.log("🔹 Uploading product:", Object.fromEntries(formData)); // ✅ Debug log
+        console.log("🔹 Uploading product:", Object.fromEntries(formData));
 
         const response = await axios.post(`${API_BASE_URL}/products/upload`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }, // ✅ Required for file upload
+            headers: { "Content-Type": "multipart/form-data" }, 
             withCredentials: true
         });
 
-        console.log("✅ Upload Successful:", response.data); // ✅ Debug log
+        console.log("✅ Upload Successful:", response.data);
         return response.data;
     } catch (error) {
         console.error("❌ Upload Product Error:", error.response?.data || error.message);
@@ -79,14 +78,14 @@ export const uploadProduct = async (formData) => {
  */
 export const postJob = async (jobData) => {
     try {
-        console.log("🔹 Posting job:", jobData); // ✅ Debug log
+        console.log("🔹 Posting job:", jobData);
 
         const response = await axios.post(`${API_BASE_URL}/jobs/post`, jobData, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         });
 
-        console.log("✅ Job Posted:", response.data); // ✅ Debug log
+        console.log("✅ Job Posted:", response.data);
         return response.data;
     } catch (error) {
         console.error("❌ Post Job Error:", error.response?.data || error.message);
@@ -99,7 +98,7 @@ export const postJob = async (jobData) => {
  */
 export const getProducts = async () => {
     try {
-        console.log("🔹 Fetching products..."); // ✅ Debug log
+        console.log("🔹 Fetching products...");
 
         const response = await axios.get(`${API_BASE_URL}/products`, { withCredentials: true });
 
@@ -107,7 +106,7 @@ export const getProducts = async () => {
             throw new Error("❌ No product data received from server!");
         }
 
-        console.log("✅ Fetched Products:", response.data.products); // ✅ Debug log
+        console.log("✅ Fetched Products:", response.data.products);
         return response.data;
     } catch (error) {
         console.error("❌ Get Products Error:", error.response?.data || error.message);
@@ -120,7 +119,7 @@ export const getProducts = async () => {
  */
 export const getJobs = async () => {
     try {
-        console.log("🔹 Fetching jobs..."); // ✅ Debug log
+        console.log("🔹 Fetching jobs...");
 
         const response = await axios.get(`${API_BASE_URL}/jobs`, { withCredentials: true });
 
@@ -128,7 +127,7 @@ export const getJobs = async () => {
             throw new Error("❌ No job data received from server!");
         }
 
-        console.log("✅ Fetched Jobs:", response.data.jobs); // ✅ Debug log
+        console.log("✅ Fetched Jobs:", response.data.jobs);
         return response.data;
     } catch (error) {
         console.error("❌ Get Jobs Error:", error.response?.data || error.message);
@@ -141,7 +140,7 @@ export const getJobs = async () => {
  */
 export const getUsers = async () => {
     try {
-        console.log("🔹 Fetching users..."); // ✅ Debug log
+        console.log("🔹 Fetching users...");
 
         const response = await axios.get(`${API_BASE_URL}/users`, { withCredentials: true });
 
@@ -149,7 +148,7 @@ export const getUsers = async () => {
             throw new Error("❌ No user data received from server!");
         }
 
-        console.log("✅ Fetched Users:", response.data.registered_users); // ✅ Debug log
+        console.log("✅ Fetched Users:", response.data.registered_users);
         return response.data;
     } catch (error) {
         console.error("❌ Get Users Error:", error.response?.data || error.message);
@@ -161,9 +160,9 @@ export const getUsers = async () => {
  * ✅ Logout User without removing cart
  */
 export const logoutUser = () => {
-    console.log("🔹 Logging out user..."); // ✅ Debug log
+    console.log("🔹 Logging out user...");
 
-    localStorage.removeItem("user"); // ✅ Remove user session only
+    localStorage.removeItem("user");
     console.log("✅ User logged out, refreshing page...");
 
     window.location.reload();

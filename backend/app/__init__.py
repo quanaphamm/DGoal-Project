@@ -11,20 +11,20 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "..", "uploads")
 def create_app():
     app = Flask(__name__)
 
-    # ✅ Fix CORS to allow credentials from frontend
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+    # ✅ Proper CORS Fix: Allow requests **only** from your frontend
+    CORS(app, resources={r"/*": {"origins": "https://dgoal-frontend.onrender.com"}}, supports_credentials=True)
 
     # ✅ Initialize Flask-Bcrypt
     bcrypt.init_app(app)
 
-    # ✅ Set Upload Folder
+    # ✅ Set Upload Folder in Config
     app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
     # ✅ Ensure Upload Folder Exists
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
 
-    # ✅ Import and Register Routes
+    # ✅ Import and Register Routes with Correct URL Prefixes
     from app.routes.auth_routes import auth_routes
     from app.routes.product_routes import product_routes
     from app.routes.job_routes import job_routes
