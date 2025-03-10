@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_bcrypt import Bcrypt
 from flask_cors import cross_origin
 
@@ -28,22 +28,28 @@ def load_data(file_path):
     except json.JSONDecodeError:
         return []  # Return empty list if JSON is corrupted
 
-# ✅ Save data to JSON file
+# ✅ Save Data
 def save_data(file_path, data):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
-
+        
 # ✅ Serve Uploaded Images
 @auth_routes.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# ✅ Handle CORS Preflight Requests (for Register & Login)
+# ✅ Handle CORS Preflight Requests
 @auth_routes.route('/auth/register', methods=['OPTIONS'])
 @auth_routes.route('/auth/login', methods=['OPTIONS'])
 @cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
-def handle_options():
-    return jsonify({"message": "CORS Preflight OK"}), 200
+def handle_preflight():
+    """Handles CORS preflight requests for auth routes"""
+    response = make_response()
+    response.headers["Access-Control-Allow-Origin"] = "https://dgoal-frontend.onrender.com"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response, 200
 
 # ✅ User Registration
 @auth_routes.route('/auth/register', methods=['POST'])
