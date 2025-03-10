@@ -39,8 +39,9 @@ def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 # ✅ Handle CORS Preflight Requests
-@auth_routes.route('/auth/register', methods=['OPTIONS'])
-@auth_routes.route('/auth/login', methods=['OPTIONS'])
+@auth_routes.route('/register', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
+
 @cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def handle_preflight():
     """Handles CORS preflight requests for auth routes"""
