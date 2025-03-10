@@ -38,15 +38,16 @@ def save_data(file_path, data):
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# ✅ Handle CORS Preflight Requests
-@auth_routes.route('/api/register', methods=['OPTIONS'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+# ✅ Handle CORS Preflight Requests (for Register & Login)
+@auth_routes.route('/auth/register', methods=['OPTIONS'])
+@auth_routes.route('/auth/login', methods=['OPTIONS'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def handle_options():
     return jsonify({"message": "CORS Preflight OK"}), 200
 
 # ✅ User Registration
-@auth_routes.route('/api/register', methods=['POST'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/auth/register', methods=['POST'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def register():
     data = request.get_json()
     full_name = data.get("fullName")
@@ -73,8 +74,8 @@ def register():
     return jsonify({"message": "Đăng ký thành công!", "user_id": user["id"]}), 201
 
 # ✅ User Login
-@auth_routes.route('/api/login', methods=['POST'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/auth/login', methods=['POST'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def login():
     data = request.get_json()
     email = data.get("email")
@@ -104,8 +105,8 @@ def login():
     return jsonify(response_data), 200
 
 # ✅ Upload Product
-@auth_routes.route('/api/products/upload', methods=['POST'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/products/upload', methods=['POST'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def upload_product():
     data = request.form
     image_file = request.files.get("image")
@@ -134,15 +135,15 @@ def upload_product():
     return jsonify({"message": "Sản phẩm đã được đăng thành công!", "product": product}), 201
 
 # ✅ Get All Products
-@auth_routes.route('/api/products', methods=['GET'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/products', methods=['GET'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_products():
     products = load_data(PRODUCTS_FILE)
     return jsonify({"products": products}), 200
 
 # ✅ Post Job (Tuyển Dụng)
-@auth_routes.route('/api/jobs/post', methods=['POST'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/jobs/post', methods=['POST'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def post_job():
     data = request.get_json()
 
@@ -166,15 +167,15 @@ def post_job():
     return jsonify({"message": "Công việc đã được đăng thành công!", "job": job}), 201
 
 # ✅ Get All Jobs
-@auth_routes.route('/api/jobs', methods=['GET'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/jobs', methods=['GET'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_jobs():
     jobs = load_data(JOBS_FILE)
     return jsonify({"jobs": jobs}), 200
 
 # ✅ Get All Registered Users
-@auth_routes.route('/api/users', methods=['GET'])
-@cross_origin(origins="https://dgoal-frontend.onrender.com", supports_credentials=True)
+@auth_routes.route('/users', methods=['GET'])
+@cross_origin(origins=["https://dgoal-frontend.onrender.com", "http://localhost:3000"], supports_credentials=True)
 def get_users():
     users = load_data(USER_FILE)
     return jsonify({"registered_users": [
