@@ -8,7 +8,10 @@ product_routes = Blueprint("product_routes", __name__)
 
 # ✅ File Paths
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-PRODUCTS_FILE = os.path.join(BASE_DIR, "..", "products.json")
+DATA_DIR = os.path.join(BASE_DIR, "..", "data")  # Create a dedicated data directory
+os.makedirs(DATA_DIR, exist_ok=True)  # Ensure it exists
+
+PRODUCTS_FILE = os.path.join(DATA_DIR, "products.json")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "static", "uploads")
 
 # Print the actual path for debugging
@@ -74,9 +77,14 @@ def upload_product():
     image_file.save(image_path)
     
     # Use an absolute URL for the image
-    image_url = f"https://dgoal-project.onrender.com/static/uploads/{unique_filename}"
+    image_url = f"https://dgoal-project.onrender.com/products/direct-image/{unique_filename}"
 
+    print(f"Saving product: {data.get('name')}")
+    print(f"To file: {PRODUCTS_FILE}")
+    
     products = load_data(PRODUCTS_FILE)
+    print(f"Current products count: {len(products)}")
+    
     product = {
         "id": len(products) + 1,
         "name": data.get("name"),
@@ -88,6 +96,7 @@ def upload_product():
     products.append(product)
     save_data(PRODUCTS_FILE, products)
 
+    print(f"New products count: {len(products)}")
     return jsonify({"message": "Sản phẩm đã được đăng bán!", "product": product}), 201
 
 # ✅ Get All Products
@@ -128,3 +137,33 @@ def test_image():
         "upload_folder": UPLOAD_FOLDER,
         "static_url": "https://dgoal-project.onrender.com/static/uploads/"
     })
+
+@product_routes.route('/direct-image/<filename>')
+def direct_image(filename):
+    """Directly serve an image from the uploads folder"""
+    try:
+        # Log the request
+        print(f"Direct image request for: {filename}")
+        print(f"Looking in: {UPLOAD_FOLDER}")
+        
+        # Check if the file exists
+        full_path = os.path.join(UPLOAD_FOLDER, filename)
+        if os.path.exists(full_path):
+            print(f"File exists at: {full_path}")
+            return send_from_directory(UPLOAD_FOLDER, filename)
+        else:
+            print(f"File not found at: {full_path}")
+            return jsonify({"error": "File not found"}), 404
+    except Exception as e:
+        print(f"Error serving image: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@product_routes.route('/refresh', methods=['GET'])
+def refresh_products():
+    """Force reload products from disk"""
+    products = load_data(PRODUCTS_FILE)
+    return jsonify({
+        "message": "Products refreshed",
+        "products_count": len(products),
+        "products": products
+    }), 200
