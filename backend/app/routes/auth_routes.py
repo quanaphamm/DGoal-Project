@@ -168,3 +168,13 @@ def get_users():
         {"id": u["id"], "full_name": u["full_name"], "email": u["email"]}
         for u in users
     ]}), 200
+
+@auth_routes.route('/register', methods=['OPTIONS'])
+@auth_routes.route('/login', methods=['OPTIONS'])
+def handle_preflight():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "https://dgoal-frontend.onrender.com")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response

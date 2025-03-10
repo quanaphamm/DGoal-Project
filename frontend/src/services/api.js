@@ -3,50 +3,20 @@ import axios from "axios";
 // ✅ Backend API Base URL (Matches the Correct Backend Endpoint)
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onrender.com/api";
 
-// Create an axios instance with the base URL
+// Create a single axios instance with proper configuration
 const api = axios.create({
     baseURL: 'https://dgoal-project.onrender.com',
-    // or if using the proxy in _redirects:
-    // baseURL: '/api',
     withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json'
+    }
 });
 
-export default api;
-
-/**
- * ✅ Login User
- * @param {Object} userData - { email, password }
- */
-export const loginUser = async (userData) => {
-    try {
-        console.log("🔹 Attempting login with:", userData);
-
-        const response = await axios.post(`${API_BASE_URL}/auth/login`, userData, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true // ✅ Ensures cookies/session work correctly
-        });
-
-        console.log("✅ Login Response:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("❌ Login Error:", error.response?.data?.error || error.message);
-        throw error;
-    }
-};
-
-/**
- * ✅ Register New User
- * @param {Object} userData - { fullName, email, password }
- */
+// Use this instance for all API calls
 export const registerUser = async (userData) => {
     try {
         console.log("🔹 Attempting registration with:", userData);
-
-        const response = await axios.post(`${API_BASE_URL}/auth/register`, userData, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true
-        });
-
+        const response = await api.post('/auth/register', userData);
         console.log("✅ Registration Successful:", response.data);
         return response.data;
     } catch (error) {
@@ -54,6 +24,19 @@ export const registerUser = async (userData) => {
         throw error;
     }
 };
+
+// Similarly update other API functions to use the api instance
+export const loginUser = async (userData) => {
+    try {
+        const response = await api.post('/auth/login', userData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Export the api instance as default
+export default api;
 
 /**
  * ✅ Upload Product for Sale (Đăng Bán Sản Phẩm)
