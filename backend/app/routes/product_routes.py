@@ -2,6 +2,9 @@ import os
 import json
 from flask import Blueprint, request, jsonify, send_from_directory, make_response
 from flask_cors import cross_origin
+import uuid
+from PIL import Image
+import numpy as np
 
 product_routes = Blueprint("product_routes", __name__)
 
@@ -65,12 +68,15 @@ def upload_product():
     if not data.get("name") or not data.get("category") or not data.get("price") or not image_file:
         return jsonify({"error": "Vui lòng nhập đầy đủ thông tin và tải lên hình ảnh."}), 400
 
-    # ✅ Save image
-    image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
+    # Generate a unique filename to avoid conflicts
+    unique_filename = f"{uuid.uuid4()}_{image_file.filename}"
+    
+    # Save to the static/uploads folder
+    image_path = os.path.join(UPLOAD_FOLDER, unique_filename)
     image_file.save(image_path)
     
-    # Use a relative path that will work with your static file serving
-    image_url = f"/static/uploads/{image_file.filename}"
+    # Use an absolute URL for the image
+    image_url = f"https://dgoal-project.onrender.com/static/uploads/{unique_filename}"
 
     products = load_data(PRODUCTS_FILE)
     product = {
@@ -110,4 +116,24 @@ def image_debug():
         "files": files,
         "exists": os.path.exists(UPLOAD_FOLDER),
         "is_dir": os.path.isdir(UPLOAD_FOLDER)
+    })
+
+@product_routes.route('/static-file/<path:filename>')
+def serve_static_file(filename):
+    static_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static"))
+    return send_from_directory(static_folder, filename)
+
+@product_routes.route('/test-image')
+def test_image():
+    # Create a simple test image
+    test_image_path = os.path.join(UPLOAD_FOLDER, "test.jpg")
+    
+    # Create a simple red square image
+    img = Image.fromarray(np.ones((100, 100, 3), dtype=np.uint8) * 255)
+    img.save(test_image_path)
+    
+    return jsonify({
+        "message": "Test image created",
+        "path": test_image_path,
+        "url": f"https://dgoal-project.onrender.com/static/uploads/test.jpg"
     })

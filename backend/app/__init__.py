@@ -9,7 +9,13 @@ bcrypt = Bcrypt()
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "..", "uploads")
 
 def create_app():
-    app = Flask(__name__, static_folder='../static', static_url_path='/static')
+    # Use an absolute path for the static folder
+    static_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static"))
+    print(f"Static folder path: {static_folder}")
+    
+    app = Flask(__name__, 
+                static_folder=static_folder, 
+                static_url_path='/static')
 
     # ✅ Fix CORS with Proper Settings
     CORS(app, resources={r"/*": {

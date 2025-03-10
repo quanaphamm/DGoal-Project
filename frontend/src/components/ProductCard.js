@@ -1,16 +1,11 @@
 const ProductCard = ({ product }) => {
-    // Add the backend URL if the image path is relative
-    const imageUrl = product.image.startsWith('http') 
-        ? product.image 
-        : `https://dgoal-project.onrender.com${product.image}`;
-    
     return (
         <div className="product-card">
             <img 
-                src={imageUrl} 
+                src={product.image} 
                 alt={product.name} 
                 onError={(e) => {
-                    console.error("Image failed to load:", imageUrl);
+                    console.error("Image failed to load:", product.image);
                     e.target.src = '/placeholder.jpg'; // Fallback image
                 }}
             />
