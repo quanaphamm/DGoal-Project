@@ -39,7 +39,7 @@ def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 # ✅ User Registration
-@auth_routes.route('/auth/register', methods=['POST'])
+@auth_routes.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     full_name = data.get("fullName")
@@ -178,3 +178,7 @@ def handle_preflight():
     response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
     response.headers.add("Access-Control-Allow-Credentials", "true")
     return response
+
+@auth_routes.route('/test', methods=['GET'])
+def test_route():
+    return jsonify({"message": "Backend is working!"}), 200
