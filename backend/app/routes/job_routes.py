@@ -24,7 +24,7 @@ def save_jobs(jobs):
         json.dump(jobs, file, indent=4)
 
 # ✅ Post Job Route
-@job_routes.route('/api/post-job', methods=['POST'])
+@job_routes.route('/post', methods=['POST'])
 def post_job():
     data = request.get_json()
 
@@ -56,3 +56,19 @@ def post_job():
     save_jobs(jobs)
 
     return jsonify({"message": "Job posted successfully!", "job": job}), 201
+
+# ✅ Get All Jobs Route
+@job_routes.route('/', methods=['GET'])
+def get_jobs():
+    jobs = load_jobs()
+    return jsonify({"jobs": jobs}), 200
+
+# ✅ Debug Jobs Route
+@job_routes.route('/debug', methods=['GET'])
+def debug_jobs():
+    jobs = load_jobs()
+    return jsonify({
+        "jobs_count": len(jobs),
+        "jobs": jobs,
+        "file_path": JOB_FILE
+    }), 200
