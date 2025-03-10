@@ -66,7 +66,10 @@ export const postJob = async (jobData) => {
     try {
         console.log("🔹 Posting job:", jobData);
 
-        const response = await api.post('/jobs/post', jobData);
+        const response = await axios.post(`${API_BASE_URL}/jobs/post`, jobData, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true
+        });
 
         console.log("✅ Job Posted:", response.data);
         return response.data;
@@ -104,7 +107,7 @@ export const getJobs = async () => {
     try {
         console.log("🔹 Fetching jobs...");
 
-        const response = await api.get('/jobs');
+        const response = await axios.get(`${API_BASE_URL}/jobs`, { withCredentials: true });
 
         if (!response.data || !response.data.jobs) {
             throw new Error("❌ No job data received from server!");
