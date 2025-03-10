@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// ✅ Backend API Base URL (Make sure it matches the correct backend URL)
+// ✅ Backend API Base URL (Matches the Correct Backend Endpoint)
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://dgoal-project.onrender.com/api";
 
 /**
@@ -13,18 +13,13 @@ export const loginUser = async (userData) => {
 
         const response = await axios.post(`${API_BASE_URL}/auth/login`, userData, {
             headers: { "Content-Type": "application/json" },
-            withCredentials: true
+            withCredentials: true // ✅ Ensures cookies/session work correctly
         });
 
         console.log("✅ Login Response:", response.data);
-
-        if (!response.data || !response.data.user) {
-            throw new Error("❌ No user data received from server!");
-        }
-
         return response.data;
     } catch (error) {
-        console.error("❌ Login Error:", error.response?.data || error.message);
+        console.error("❌ Login Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -43,10 +38,9 @@ export const registerUser = async (userData) => {
         });
 
         console.log("✅ Registration Successful:", response.data);
-
         return response.data;
     } catch (error) {
-        console.error("❌ Registration Error:", error.response?.data || error.message);
+        console.error("❌ Registration Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -60,14 +54,14 @@ export const uploadProduct = async (formData) => {
         console.log("🔹 Uploading product:", Object.fromEntries(formData));
 
         const response = await axios.post(`${API_BASE_URL}/products/upload`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }, 
+            headers: { "Content-Type": "multipart/form-data" },
             withCredentials: true
         });
 
         console.log("✅ Upload Successful:", response.data);
         return response.data;
     } catch (error) {
-        console.error("❌ Upload Product Error:", error.response?.data || error.message);
+        console.error("❌ Upload Product Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -88,7 +82,7 @@ export const postJob = async (jobData) => {
         console.log("✅ Job Posted:", response.data);
         return response.data;
     } catch (error) {
-        console.error("❌ Post Job Error:", error.response?.data || error.message);
+        console.error("❌ Post Job Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -109,7 +103,7 @@ export const getProducts = async () => {
         console.log("✅ Fetched Products:", response.data.products);
         return response.data;
     } catch (error) {
-        console.error("❌ Get Products Error:", error.response?.data || error.message);
+        console.error("❌ Get Products Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -130,7 +124,7 @@ export const getJobs = async () => {
         console.log("✅ Fetched Jobs:", response.data.jobs);
         return response.data;
     } catch (error) {
-        console.error("❌ Get Jobs Error:", error.response?.data || error.message);
+        console.error("❌ Get Jobs Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
@@ -142,7 +136,7 @@ export const getUsers = async () => {
     try {
         console.log("🔹 Fetching users...");
 
-        const response = await axios.get(`${API_BASE_URL}/users`, { withCredentials: true });
+        const response = await axios.get(`${API_BASE_URL}/auth/users`, { withCredentials: true });
 
         if (!response.data || !response.data.registered_users) {
             throw new Error("❌ No user data received from server!");
@@ -151,7 +145,7 @@ export const getUsers = async () => {
         console.log("✅ Fetched Users:", response.data.registered_users);
         return response.data;
     } catch (error) {
-        console.error("❌ Get Users Error:", error.response?.data || error.message);
+        console.error("❌ Get Users Error:", error.response?.data?.error || error.message);
         throw error;
     }
 };
