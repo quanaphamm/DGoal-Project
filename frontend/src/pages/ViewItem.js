@@ -1,23 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getProducts } from "../services/api"; // ✅ Import API function
 import "./ViewItem.css";
 
-const items = [
-  { id: 1, name: "iPhone 13", price: "12,000,000đ", location: "Hà Nội", image: "/img/devices/dt1.jpg", description: "Chi tiết về iPhone 13." },
-  { id: 2, name: "Samsung Galaxy S21", price: "9,500,000đ", location: "Hồ Chí Minh", image: "/img/devices/dt2.jpg", description: "Chi tiết về Samsung Galaxy S21." },
-  { id: 3, name: "Xiaomi Mi 11", price: "7,000,000đ", location: "Đà Nẵng", image: "/img/devices/dt3.jpg", description: "Chi tiết về Xiaomi Mi 11." },
-  { id: 4, name: "Oppo Reno 6", price: "8,000,000đ", location: "Hà Nội", image: "/img/devices/dt4.jpg", description: "Chi tiết về Oppo Reno 6." },
-  { id: 5, name: "Vivo X70 Pro", price: "8,500,000đ", location: "Hồ Chí Minh", image: "/img/devices/dt5.jpg", description: "Chi tiết về Vivo X70 Pro." }
-];
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; // ✅ Backend Base URL
 
 const ViewItem = ({ setCartItems }) => {
   const { id } = useParams();
-  const item = items.find(i => i.id === parseInt(id));
+  const [item, setItem] = useState(null); // ✅ Store item details
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchItem() {
+      try {
+        console.log(`🔄 Fetching item with ID: ${id}`);
+        const response = await getProducts();
+
+        const foundItem = response.products.find((product) => product.id === parseInt(id));
+
+        if (!foundItem) {
+          setError("Sản phẩm không tồn tại.");
+        } else {
+          setItem(foundItem);
+        }
+      } catch (err) {
+        console.error("❌ Error fetching item:", err);
+        setError("Lỗi khi tải sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchItem();
+  }, [id]);
 
   const addToCart = () => {
     if (!item) return;
 
-    setCartItems(prevCart => {
+    setCartItems((prevCart) => {
       const updatedCart = [...prevCart, item];
       localStorage.setItem("cart", JSON.stringify(updatedCart)); // ✅ Store updated cart in localStorage
       return updatedCart;
@@ -26,27 +47,31 @@ const ViewItem = ({ setCartItems }) => {
     alert(`✅ Đã thêm ${item.name} vào giỏ hàng!`);
   };
 
-  if (!item) {
-    return <h2>Sản phẩm không tồn tại</h2>;
-  }
+  if (loading) return <h2>🔄 Đang tải sản phẩm...</h2>;
+  if (error) return <h2 className="error-message">{error}</h2>;
+  if (!item) return <h2 className="error-message">Sản phẩm không tồn tại</h2>;
 
   return (
     <div className="view-container">
       <div className="view-item">
         <div className="view-image">
-          <img src={item.image} alt={item.name} />
+          <img
+            src={item.image ? `${API_BASE_URL}${item.image}` : "/img/default-product.jpg"}
+            alt={item.name}
+            onError={(e) => (e.target.src = "/img/default-product.jpg")} // ✅ Handle missing images
+          />
         </div>
         <div className="view-details">
           <h2>{item.name}</h2>
-          <p className="view-price">{item.price}</p>
-          <p className="view-location">📍 {item.location}</p>
+          <p className="view-price">{parseInt(item.price).toLocaleString()}đ</p>
+          <p className="view-location">📍 {item.location || "Không rõ"}</p>
           <button className="buy-button">Mua ngay</button>
           <button className="cart-button" onClick={addToCart}>Thêm vào giỏ hàng</button>
         </div>
       </div>
       <div className="view-description">
         <h3>Chi tiết sản phẩm</h3>
-        <p>{item.description}</p>
+        <p>{item.description || "Không có mô tả."}</p>
       </div>
     </div>
   );

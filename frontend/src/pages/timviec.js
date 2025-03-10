@@ -1,77 +1,76 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./timviec.css";
+import { getJobs } from "../services/api"; // ✅ Import API function
 
 const TimViec = () => {
-    const [jobs, setJobs] = useState([]);
+    const [jobs, setJobs] = useState([]); // ✅ Store job listings
     const [selectedJob, setSelectedJob] = useState(null);
+    const [loading, setLoading] = useState(true); // ✅ Show loading state
+    const [error, setError] = useState(""); // ✅ Handle errors
     const location = useLocation();
 
     useEffect(() => {
-        // ✅ Get stored jobs or use empty array if none exist
-        const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+        // ✅ Fetch jobs from backend
+        async function fetchJobs() {
+            try {
+                console.log("🔄 Fetching jobs...");
+                const response = await getJobs(); // ✅ Fetch from API
+                console.log("✅ Fetched Jobs:", response.jobs);
 
-        // ✅ Default job listings
-        const defaultJobs = [
-            {
-                id: 5, // Ensuring a unique ID
-                title: "Lái xe bồn",
-                company: "CTNH MINQUAN.",
-                salary: "67tr/tháng",
-                location: "Sài Gòn",
-                type: "Toàn thời gian",
-                description: "Lái xe bồn chở hàng đến các địa điểm được chỉ định, đảm bảo an toàn giao thông...",
-                requirements: "Có bằng lái xe hạng C trở lên, có ít nhất 2 năm kinh nghiệm lái xe bồn."
-            },
-            {
-                id: 2, // Ensuring a unique ID
-                title: "Kế toán",
-                company: "CTNH MINQUAN.",
-                salary: "15-20tr/tháng",
-                location: "Sài Gòn",
-                type: "Toàn thời gian",
-                description: "Phụ trách sổ sách kế toán, theo dõi thu chi, lập báo cáo tài chính...",
-                requirements: "Tốt nghiệp chuyên ngành kế toán, có chứng chỉ hành nghề kế toán là lợi thế."
+                // ✅ Ensure jobs exist
+                if (!response.jobs || response.jobs.length === 0) {
+                    setError("Không có công việc nào.");
+                    return;
+                }
+
+                setJobs(response.jobs);
+
+                // ✅ Check for job selection in URL
+                const queryParams = new URLSearchParams(location.search);
+                const jobIdFromURL = parseInt(queryParams.get("jobId"));
+
+                if (jobIdFromURL) {
+                    const jobToSelect = response.jobs.find(job => job.id === jobIdFromURL);
+                    if (jobToSelect) {
+                        setSelectedJob(jobToSelect);
+                    }
+                } else {
+                    setSelectedJob(response.jobs[0]); // ✅ Default to first job
+                }
+            } catch (error) {
+                console.error("❌ Error fetching jobs:", error);
+                setError("Lỗi khi tải danh sách công việc.");
+            } finally {
+                setLoading(false); // ✅ Hide loading
             }
-        ];
-
-        // ✅ Ensure unique job IDs by using a Set
-        const allJobs = [...defaultJobs, ...storedJobs];
-        const uniqueJobs = Array.from(new Map(allJobs.map(job => [job.id, job])).values());
-
-        setJobs(uniqueJobs);
-
-        // ✅ Check for job selection in URL
-        const queryParams = new URLSearchParams(location.search);
-        const jobIdFromURL = parseInt(queryParams.get("jobId"));
-
-        if (jobIdFromURL) {
-            const jobToSelect = uniqueJobs.find(job => job.id === jobIdFromURL);
-            if (jobToSelect) {
-                setSelectedJob(jobToSelect);
-            }
-        } else {
-            setSelectedJob(uniqueJobs[0]); // ✅ Default to first job
         }
-    }, [location.search]);
+        fetchJobs();
+    }, [location.search]); // ✅ Fetch jobs on page load or URL change
 
     return (
         <div className="timviec-container">
             {/* ✅ Job List Section */}
             <div className="job-list">
-                {jobs.map((job) => (
-                    <div 
-                        key={job.id}  // ✅ Ensured Unique Key
-                        className={`job-item ${selectedJob?.id === job.id ? "selected" : ""}`} 
-                        onClick={() => setSelectedJob(job)}
-                    >
-                        <h3>{job.title}</h3>
-                        <p><strong>{job.company}</strong></p>
-                        <p className="salary">💰 {job.salary}</p>
-                        <p className="location">📍 {job.location}</p>
-                        <p className="type">⏳ {job.type}</p>
-                    </div>
-                ))}
+                {loading ? (
+                    <p className="loading-message">Đang tải công việc...</p>
+                ) : error ? (
+                    <p className="error-message">{error}</p>
+                ) : (
+                    jobs.map((job) => (
+                        <div
+                            key={job.id}  // ✅ Ensured Unique Key
+                            className={`job-item ${selectedJob?.id === job.id ? "selected" : ""}`} 
+                            onClick={() => setSelectedJob(job)}
+                        >
+                            <h3>{job.title}</h3>
+                            <p><strong>{job.company}</strong></p>
+                            <p className="salary">💰 {job.salary}</p>
+                            <p className="location">📍 {job.location}</p>
+                            <p className="type">⏳ {job.type}</p>
+                        </div>
+                    ))
+                )}
             </div>
 
             {/* ✅ Job Details Section */}

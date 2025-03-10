@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../services/api"; // ✅ Import API function
 import "./Register.css";
 
@@ -11,39 +11,52 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ Added loading state
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value.trim() }); // ✅ Trim input values
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true); // ✅ Show loading state
 
+    // ✅ Validation
     if (!user.fullName || !user.email || !user.password || !user.confirmPassword) {
       setError("Vui lòng nhập đầy đủ thông tin.");
+      setLoading(false);
       return;
     }
 
     if (user.password !== user.confirmPassword) {
       setError("Mật khẩu không khớp.");
+      setLoading(false);
       return;
     }
 
     try {
+      console.log("🔄 Attempting registration with:", user); // ✅ Debugging log
+
       const response = await registerUser({
         fullName: user.fullName,
         email: user.email,
         password: user.password,
       });
 
+      console.log("✅ Registration Successful:", response.data); // ✅ Debugging log
+
       setSuccess("Đăng ký thành công! Chuyển hướng đến trang đăng nhập...");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/login"), 1500); // ✅ Reduced delay
     } catch (err) {
+      console.error("❌ Registration Error:", err.response?.data || err.message); // ✅ Debugging log
       setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+      setLoading(false); // ✅ Hide loading state
     }
   };
 
@@ -66,10 +79,12 @@ const Register = () => {
         <label>Xác nhận mật khẩu:</label>
         <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" value={user.confirmPassword} onChange={handleChange} required />
 
-        <button type="submit" className="register-button">Đăng Ký</button>
+        <button type="submit" className="register-button" disabled={loading}>
+          {loading ? "Đang đăng ký..." : "Đăng Ký"}
+        </button>
 
         <p className="login-link">
-          Đã có tài khoản? <a href="/login">Đăng nhập</a>
+          Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
         </p>
       </form>
     </div>

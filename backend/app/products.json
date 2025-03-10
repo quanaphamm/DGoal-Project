@@ -1,0 +1,42 @@
+[
+    {
+        "id": 2,
+        "name": "QUAN ANH PHAM",
+        "category": "dienthoai",
+        "description": "1231",
+        "price": "12312312",
+        "image": "/uploads/dt5 - Copy (7).jpg"
+    },
+    {
+        "id": 3,
+        "name": "Generic H2e (Embedded)",
+        "category": "dienthoai",
+        "description": "qwe1q21",
+        "price": "12314123",
+        "image": "/uploads/dt1.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Quan Jean",
+        "category": "quanao",
+        "description": "123",
+        "price": "12314",
+        "image": "/uploads/quanao3 - Copy - Copy (2).jpg"
+    },
+    {
+        "id": 4,
+        "name": "quan jeanadf",
+        "category": "quanao",
+        "description": "23413",
+        "price": "132414",
+        "image": "/uploads/quanao2 - Copy - Copy (2).jpg"
+    },
+    {
+        "id": 5,
+        "name": "ao",
+        "category": "quanao",
+        "description": "asfe",
+        "price": "123414",
+        "image": "/uploads/quanao3 - Copy - Copy - Copy - Copy.jpg"
+    }
+]

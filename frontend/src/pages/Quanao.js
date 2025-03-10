@@ -1,32 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Quanao.css";
-import FilterNav from "../components/FilterNav"; // ✅ Import the filter component
+import FilterNav from "../components/FilterNav"; // ✅ Import filter component
+import { getProducts } from "../services/api"; // ✅ Import API function
 
-const preloadedItems = [
-  { id: 1, name: "Áo Thun Nam", price: 250000, location: "Hà Nội", status: "new", image: "/img/clothings/quanao1.jpg" },
-  { id: 2, name: "Quần Jeans", price: 450000, location: "Hồ Chí Minh", status: "used", image: "/img/clothings/quanao2.jpg" },
-  { id: 3, name: "Áo Khoác", price: 600000, location: "Đà Nẵng", status: "new", image: "/img/clothings/quanao3.jpg" },
-  { id: 4, name: "Váy Nữ", price: 800000, location: "Hà Nội", status: "used", image: "/img/clothings/quanao4.jpg" },
-  { id: 5, name: "Giày Sneaker", price: 1200000, location: "Hồ Chí Minh", status: "new", image: "/img/clothings/quanao1.jpg" }
-];
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; // ✅ Ensure correct base URL
 
 const Quanao = () => {
   const navigate = useNavigate();
-  const [filteredItems, setFilteredItems] = useState(preloadedItems);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [allItems, setAllItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // ✅ Load user-added products from localStorage
+  // ✅ Fetch "quanao" products from backend on first render
   useEffect(() => {
-    const storedProducts = JSON.parse(localStorage.getItem("quanao")) || [];
-    setFilteredItems([...preloadedItems, ...storedProducts]);
+    async function fetchProducts() {
+      try {
+        console.log("🔄 Fetching quần áo products...");
+        const response = await getProducts();
+        console.log("✅ Fetched Products:", response.products);
+
+        // ✅ Filter only "quanao" category
+        const clothingProducts = response.products.filter(
+          (item) => item.category === "quanao"
+        );
+
+        if (!clothingProducts || clothingProducts.length === 0) {
+          setError("Không có sản phẩm nào.");
+          return;
+        }
+
+        setAllItems(clothingProducts);
+        setFilteredItems(clothingProducts);
+      } catch (error) {
+        console.error("❌ Error fetching products:", error);
+        setError("Lỗi khi tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
   }, []);
 
+  // ✅ Handle filtering products
   const handleFilterChange = (filters) => {
-    let updatedItems = [...preloadedItems, ...(JSON.parse(localStorage.getItem("quanao")) || [])];
+    let updatedItems = [...allItems];
 
-    // Filter by Price
     if (filters.price !== "all") {
-      updatedItems = updatedItems.filter(item => {
+      updatedItems = updatedItems.filter((item) => {
         if (filters.price === "low") return item.price < 500000;
         if (filters.price === "medium") return item.price >= 500000 && item.price <= 1000000;
         if (filters.price === "high") return item.price > 1000000;
@@ -34,14 +56,12 @@ const Quanao = () => {
       });
     }
 
-    // Filter by Location
     if (filters.location !== "all") {
-      updatedItems = updatedItems.filter(item => item.location === filters.location);
+      updatedItems = updatedItems.filter((item) => item.location === filters.location);
     }
 
-    // Filter by Status (New/Used)
     if (filters.status !== "all") {
-      updatedItems = updatedItems.filter(item => item.status === filters.status);
+      updatedItems = updatedItems.filter((item) => item.status === filters.status);
     }
 
     setFilteredItems(updatedItems);
@@ -49,22 +69,33 @@ const Quanao = () => {
 
   return (
     <div className="quanao-container">
-      {/* ✅ Add the FilterNav component */}
       <FilterNav onFilterChange={handleFilterChange} />
 
       <div className="quanao-content">
         <h2 className="section-title">Quần Áo</h2>
-        <div className="clothing-grid">
-          {filteredItems.map(item => (
-            <div key={item.id} className="clothing-item" onClick={() => navigate(`/view/${item.id}`)}>
-              <img src={item.image || "/img/default-clothing.jpg"} alt={item.name} className="clothing-image" />
-              <p className="clothing-name">{item.name}</p>
-              <p className="clothing-price">{item.price.toLocaleString()}đ</p>
-              <p className="clothing-location">📍 {item.location || "Không rõ"}</p>
-              <p className="clothing-status">{item.status === "new" ? "🆕 Mới" : "♻️ Cũ"}</p>
-            </div>
-          ))}
-        </div>
+
+        {loading ? (
+          <p className="loading-message">Đang tải sản phẩm...</p>
+        ) : error ? (
+          <p className="error-message">{error}</p>
+        ) : (
+          <div className="clothing-grid">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="clothing-item" onClick={() => navigate(`/view/${item.id}`)}>
+                <img 
+                  src={item.image ? `${API_BASE_URL}${item.image}` : "/img/default-clothing.jpg"}
+                  alt={item.name}
+                  className="clothing-image"
+                  onError={(e) => { e.target.src = "/img/default-clothing.jpg"; }} // ✅ Handle broken images
+                />
+                <p className="clothing-name">{item.name}</p>
+                <p className="clothing-price">{item.price.toLocaleString()}đ</p>
+                <p className="clothing-location">📍 {item.location || "Không rõ"}</p>
+                <p className="clothing-status">{item.status === "new" ? "🆕 Mới" : "♻️ Cũ"}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

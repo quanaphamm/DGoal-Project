@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { uploadProduct } from "../services/api"; // ✅ API function
+import { uploadProduct } from "../services/api"; // ✅ Import API function
 import "./DangBan.css";
 
 const DangBan = () => {
@@ -17,6 +17,7 @@ const DangBan = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [loading, setLoading] = useState(false); // ✅ Added loading state
 
     // 🛠 Handle input changes
     const handleChange = (e) => {
@@ -37,9 +38,18 @@ const DangBan = () => {
         e.preventDefault();
         setError("");
         setSuccess("");
+        setLoading(true); // ✅ Show loading state
+
+        // ✅ Input validation
+        if (!product.name || !product.description || !product.price) {
+            setError("Vui lòng điền đầy đủ thông tin!");
+            setLoading(false);
+            return;
+        }
 
         if (!product.image) {
             setError("Hãy tải lên một hình ảnh sản phẩm!");
+            setLoading(false);
             return;
         }
 
@@ -52,13 +62,19 @@ const DangBan = () => {
         formData.append("image", product.image);
 
         try {
+            console.log("🔄 Uploading product:", product); // ✅ Debug log
             const response = await uploadProduct(formData); // ✅ Send to backend
+            console.log("✅ Product uploaded:", response); // ✅ Debug log
+
             setSuccess("Sản phẩm đã được đăng thành công!");
-            
+
             // ✅ Redirect after 2s
             setTimeout(() => navigate(`/${product.category}`), 2000);
         } catch (err) {
+            console.error("❌ Upload Error:", err.response?.data || err.message); // ✅ Debug log
             setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+        } finally {
+            setLoading(false); // ✅ Hide loading state
         }
     };
 
@@ -72,7 +88,14 @@ const DangBan = () => {
                 {/* 🏷 Product Name */}
                 <div className="form-group">
                     <label>Tên Sản Phẩm:</label>
-                    <input type="text" name="name" value={product.name} onChange={handleChange} required />
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Nhập tên sản phẩm"
+                        value={product.name}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 {/* 🏷 Product Category */}
@@ -96,17 +119,32 @@ const DangBan = () => {
                 {/* 🏷 Product Description */}
                 <div className="form-group">
                     <label>Mô Tả:</label>
-                    <textarea name="description" value={product.description} onChange={handleChange} required></textarea>
+                    <textarea
+                        name="description"
+                        placeholder="Nhập mô tả sản phẩm"
+                        value={product.description}
+                        onChange={handleChange}
+                        required
+                    ></textarea>
                 </div>
 
                 {/* 🏷 Product Price */}
                 <div className="form-group">
                     <label>Giá:</label>
-                    <input type="number" name="price" value={product.price} onChange={handleChange} required />
+                    <input
+                        type="number"
+                        name="price"
+                        placeholder="Nhập giá sản phẩm"
+                        value={product.price}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 {/* ✅ Submit Button */}
-                <button type="submit" className="submit-btn">Đăng Bán</button>
+                <button type="submit" className="submit-btn" disabled={loading}>
+                    {loading ? "Đang đăng..." : "Đăng Bán"}
+                </button>
             </form>
         </div>
     );

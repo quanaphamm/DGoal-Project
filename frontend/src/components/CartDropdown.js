@@ -4,6 +4,7 @@ import "./CartDropdown.css";
 
 const CartDropdown = () => {
   const [cart, setCart] = useState([]);
+  const [isHovered, setIsHovered] = useState(false); // ✅ State to keep dropdown open
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -17,7 +18,11 @@ const CartDropdown = () => {
   };
 
   return (
-    <div className="cart-dropdown">
+    <div 
+      className="cart-dropdown-container"
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setTimeout(() => setIsHovered(false), 300)} // ✅ Small delay before closing
+    >
       <h4>🛒 Giỏ Hàng ({cart.length})</h4>
       
       {cart.length === 0 ? (
@@ -37,7 +42,7 @@ const CartDropdown = () => {
             ))}
           </ul>
 
-          {/* ✅ Checkout button should always be at the bottom */}
+          {/* ✅ Ensure checkout button is clickable */}
           <div className="cart-footer">
             <Link to="/checkout" className="checkout-button">Thanh toán</Link>
           </div>

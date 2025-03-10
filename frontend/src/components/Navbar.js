@@ -7,50 +7,66 @@ const NavigationBar = ({ cartItems, setCartItems }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [showCart, setShowCart] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    // ✅ Load user from localStorage
+    // ✅ Load user from localStorage on mount
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("user"));
         if (storedUser) {
             setUser(storedUser);
         } else {
-            // ✅ If no user, clear cart
-            setCartItems([]);
+            setCartItems([]); // Clear cart if no user
             localStorage.removeItem("cart");
         }
     }, []);
 
-    // ✅ Handle Logout
     const handleLogout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("cart"); // Clear cart when user logs out
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || []; // ✅ Preserve cart
+        localStorage.removeItem("user"); // ✅ Remove only user data
+        localStorage.setItem("cart", JSON.stringify(storedCart)); // ✅ Restore cart
         setUser(null);
-        setCartItems([]); // Reset cart state
+        setCartItems(storedCart);
         navigate("/login");
+    };
+    
+
+    // ✅ Handle Search
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim() !== "") {
+            navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+        }
     };
 
     return (
         <div className="fixed-navbar">
             <Navbar bg="dark" variant="dark" expand="lg" className="main-navbar">
                 <Container fluid>
-                    <Navbar.Brand href="/" className="navbar-logo">THỬ NGHIỆM</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/" className="navbar-logo">THỬ NGHIỆM</Navbar.Brand>
 
-                    {/* 🔹 Search Bar */}
-                    <Form className="d-flex mx-auto search-bar">
-                        <FormControl type="search" placeholder="Search..." className="me-2" />
+                    {/* 🔍 Search Bar */}
+                    <Form className="d-flex mx-auto search-bar" onSubmit={handleSearch}>
+                        <FormControl
+                            type="search"
+                            placeholder="Tìm kiếm..."
+                            className="me-2"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <Button variant="outline-light" type="submit">🔍</Button>
                     </Form>
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto navbar-links">
                             <NavDropdown title="About" className="nav-item">
-                                <NavDropdown.Item href="/privacy">Privacy Policy</NavDropdown.Item>
-                                <NavDropdown.Item href="/terms">Terms of Service</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/privacy">Chính sách bảo mật</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/terms">Điều khoản dịch vụ</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/tuyendung" className="nav-item">Tuyển dụng</Nav.Link>
-                            <Nav.Link href="/dangban" className="nav-item">Đăng bán</Nav.Link>
+                            <Nav.Link as={Link} to="/tuyendung" className="nav-item">Tuyển dụng</Nav.Link>
+                            <Nav.Link as={Link} to="/dangban" className="nav-item">Đăng bán</Nav.Link>
 
-                            {/* 🔹 Show Cart ONLY if User is Logged In */}
+                            {/* 🛒 Cart Dropdown (Only for Logged-in Users) */}
                             {user && (
                                 <NavDropdown
                                     title={`🛒 Giỏ Hàng (${cartItems.length})`}
@@ -77,15 +93,15 @@ const NavigationBar = ({ cartItems, setCartItems }) => {
                                 </NavDropdown>
                             )}
 
-                            {/* 🔹 User Dropdown OR Login Button */}
+                            {/* 👤 User Dropdown OR Login Button */}
                             {user ? (
                                 <NavDropdown title={user.full_name} className="user-dropdown">
-                                    <NavDropdown.Item href="/profile">Hồ sơ</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/profile">Hồ sơ</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={handleLogout}>Đăng xuất</NavDropdown.Item>
                                 </NavDropdown>
                             ) : (
-                                <Button variant="outline-light" href="/login" className="login-btn">
+                                <Button variant="outline-light" as={Link} to="/login" className="login-btn">
                                     Đăng Nhập
                                 </Button>
                             )}

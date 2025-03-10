@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api"; // ✅ Import API function
 import "./Login.css";
 
@@ -7,7 +7,9 @@ const Login = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ Loading state
 
+  // ✅ Handle input changes
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -15,22 +17,34 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const response = await loginUser(user); // ✅ Use API function from `services/api.js`
+        console.log("🔄 Attempting login with:", user);
 
-      // ✅ Store user data in localStorage to persist session
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+        const response = await loginUser(user);
+        console.log("✅ Login Response:", response);
 
-      // ✅ Redirect to homepage
-      navigate("/frontpage");
+        if (!response || !response.user) {
+            throw new Error("❌ No user data received from server!");
+        }
 
-      // ✅ Reload to update Navbar immediately
-      window.location.reload();
+        localStorage.setItem("user", JSON.stringify(response.user));  // ✅ Store user session
+
+        // ✅ Preserve Cart After Login
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        localStorage.setItem("cart", JSON.stringify(storedCart)); // ✅ Restore cart
+
+        navigate("/frontpage");
+        window.location.reload();
     } catch (err) {
-      setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+        console.error("❌ Login Error:", err.response?.data || err.message);
+        setError(err.response?.data?.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="login-container">
@@ -59,10 +73,12 @@ const Login = () => {
           required
         />
 
-        <button type="submit" className="login-button">Đăng Nhập</button>
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? "Đang đăng nhập..." : "Đăng Nhập"}
+        </button>
 
         <p className="register-link">
-          Chưa có tài khoản? <a href="/register">Đăng ký</a>
+          Chưa có tài khoản? <Link to="/register">Đăng ký</Link>
         </p>
       </form>
     </div>

@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "full_name": "QUAN ANH PHAM",
+        "email": "hackersieupham@gmail.com",
+        "password_hash": "$2b$12$nEhiHRHLyxmSz1K.vTobRuRc80javdGONtH7Ki8q/wzGoZGFaUI/O"
+    },
+    {
+        "id": 2,
+        "full_name": "QUAN ANH PHA",
+        "email": "phamanhquan4068@gmail.com",
+        "password_hash": "$2b$12$pJ.5xhWczZLyJOS2bFnYyO/C.4wrEORlrw/8tOjrEvIy7gM/m628S"
+    }
+]
