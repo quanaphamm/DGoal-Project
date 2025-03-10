@@ -1,20 +1,46 @@
 import React, { useState, useEffect } from "react";
 import "./PostModal.css";
 
-const PostModal = ({ user, onClose }) => {
+const PostModal = ({ user, onClose, onPost }) => {
   const [postContent, setPostContent] = useState("");
+  const [currentUser, setCurrentUser] = useState("QUAN ANH PHAM"); // Default user
 
+  // ✅ Load user from localStorage on mount
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setPostContent({ ...postContent, user: storedUser.fullName || "QUAN ANH PHAM" });
+    if (storedUser && storedUser.fullName) {
+      setCurrentUser(storedUser.fullName);
     }
   }, []);
 
+  // ✅ Handle Post Submission
   const handlePost = () => {
     if (!postContent.trim()) return;
-    console.log("Post Created:", postContent);
-    onClose(); // Close the modal after posting
+
+    // ✅ Create New Post Object
+    const newPost = {
+      id: Date.now(),
+      user: currentUser,
+      avatar: "/img/avatar-user.png",
+      time: "Vừa xong",
+      content: postContent,
+      image: null,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+    };
+
+    // ✅ Log the post (You can replace this with API call)
+    console.log("✅ New Post Created:", newPost);
+
+    // ✅ Pass the new post to parent component (e.g., `FrontPage.js`)
+    if (onPost) {
+      onPost(newPost);
+    }
+
+    // ✅ Clear input and close modal
+    setPostContent("");
+    onClose();
   };
 
   return (
@@ -29,7 +55,7 @@ const PostModal = ({ user, onClose }) => {
         <div className="post-modal-user">
           <img src="/img/avatar-user.png" alt="Avatar" className="post-avatar" />
           <div className="post-user-info">
-            <h3>{user?.fullName || "QUAN ANH PHAM"}</h3>
+            <h3>{currentUser}</h3>
             <span>🛡 Bạn bè</span>
           </div>
         </div>
